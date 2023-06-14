@@ -1,8 +1,10 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/trungluongwww/goupload/internal/response"
+	"github.com/trungluongwww/goupload/internal/utils/echocontext"
 	requestmodel "github.com/trungluongwww/goupload/pkg/upload/model/request"
 	"github.com/trungluongwww/goupload/pkg/upload/service"
 )
@@ -21,11 +23,14 @@ func Init() Handler {
 func (handler) Photo(c echo.Context) error {
 	var (
 		ctx     = c.Request().Context()
-		payload = c.Get("payload").([]requestmodel.FileInfoPayload)
+		files   = echocontext.GetFiles(c).([]requestmodel.FileInfoPayload)
+		payload = echocontext.GetPayload(c).(requestmodel.ClientPayload)
 		s       = service.Photo()
 	)
 
-	res, err := s.Upload(ctx, payload)
+	fmt.Println(files)
+
+	res, err := s.Upload(ctx, files, payload)
 	if err != nil {
 		return response.R400(c, nil, err.Error())
 	}
