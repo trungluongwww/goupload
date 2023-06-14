@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/trungluongwww/goupload/pkg/upload"
+	"os"
 )
 
 func main() {
@@ -18,5 +19,7 @@ func main() {
 
 	e.Static("/static", "static")
 
-	e.Logger.Fatal(e.Start(":5000"))
+	port := os.Getenv("PORT")
+
+	e.Logger.Fatal(e.Start(port))
 }

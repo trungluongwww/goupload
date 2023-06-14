@@ -110,7 +110,7 @@ func (s photoImpl) convertToRawAndInsertDoc(ctx context.Context, origin requestm
 
 func (s photoImpl) convertToResponse(raw model.FileRaw) *responsemodel.PhotoResponse {
 	var (
-		url = "http://localhost:5000/static"
+		url = os.Getenv("HOST")
 	)
 
 	return &responsemodel.PhotoResponse{
@@ -120,12 +120,12 @@ func (s photoImpl) convertToResponse(raw model.FileRaw) *responsemodel.PhotoResp
 			Small: responsemodel.SizePhoto{
 				Width:  raw.Dimension.Small.Width,
 				Height: raw.Dimension.Medium.Height,
-				Url:    fmt.Sprintf("%s/%s_%s", url, constant.PrefixDimension.Small, raw.Name),
+				Url:    fmt.Sprintf("%s/%s/%s_%s", url, "static", constant.PrefixDimension.Small, raw.Name),
 			},
 			Medium: responsemodel.SizePhoto{
 				Width:  0,
 				Height: 0,
-				Url:    fmt.Sprintf("%s/%s_%s", url, constant.PrefixDimension.Medium, raw.Name),
+				Url:    fmt.Sprintf("%s/%s/%s_%s", url, "static", constant.PrefixDimension.Medium, raw.Name),
 			},
 		},
 	}
