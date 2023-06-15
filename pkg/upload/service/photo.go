@@ -119,12 +119,12 @@ func (s photoImpl) convertToResponse(raw model.FileRaw) *responsemodel.PhotoResp
 		Dimensions: responsemodel.DimensionPhoto{
 			Small: responsemodel.SizePhoto{
 				Width:  raw.Dimension.Small.Width,
-				Height: raw.Dimension.Medium.Height,
+				Height: raw.Dimension.Small.Height,
 				Url:    fmt.Sprintf("%s/%s/%s_%s", url, "static", constant.PrefixDimension.Small, raw.Name),
 			},
 			Medium: responsemodel.SizePhoto{
-				Width:  0,
-				Height: 0,
+				Width:  raw.Dimension.Medium.Width,
+				Height: raw.Dimension.Medium.Height,
 				Url:    fmt.Sprintf("%s/%s/%s_%s", url, "static", constant.PrefixDimension.Medium, raw.Name),
 			},
 		},
