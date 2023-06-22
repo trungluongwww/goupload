@@ -27,14 +27,17 @@ var (
 
 // extension
 var (
-	ListExtensionPhotoValid = []string{"JPEG", "JPG", "PNG", "jpg", "png", "jpeg"}
-	ZipExtension            = ".zip"
+	ListExtensionPhotoValid    = []string{"JPEG", "JPG", "PNG", "jpg", "png", "jpeg"}
+	ZipExtension               = ".zip"
+	ListCompressPhotoExtension = []string{"jpg", "jpeg", "JPEG", "JPG"}
 )
 
 var TypeFile = struct {
 	Photo string
+	File  string
 }{
 	Photo: "photo",
+	File:  "file",
 }
 
 var PrefixDimension = struct {

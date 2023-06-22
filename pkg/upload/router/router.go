@@ -14,7 +14,10 @@ func Init(e *echo.Echo) {
 		v = routervalidation.Validation()
 	)
 
-	g.POST("/photos", h.Photo, v.ClientPayload, middleware.UploadPhoto())
+	g.POST("/photos", h.Photo, v.ClientPayload, middleware.UploadPhotos())
 
 	g.POST("/zip-photos", h.Photo, v.ClientPayload, middleware.UploadZipPhoto())
+
+	g.POST("/pdfs", h.PDF, v.ClientPayload, middleware.UploadFile())
+
 }

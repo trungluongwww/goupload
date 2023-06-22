@@ -2,24 +2,19 @@ package middleware
 
 import (
 	"archive/zip"
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"github.com/trungluongwww/goupload/internal/constant"
 	"github.com/trungluongwww/goupload/internal/response"
 	"github.com/trungluongwww/goupload/internal/utils/echocontext"
+	"github.com/trungluongwww/goupload/internal/utils/prandom"
 	requestmodel "github.com/trungluongwww/goupload/pkg/upload/model/request"
 	"io"
 	"os"
 	"path"
 	"strings"
-	"time"
 )
 
-func generateDatetimeName(name string) string {
-	return fmt.Sprintf("%s_%s", time.Now().Format("2006_01_02_15_04_05_0700"), name)
-}
-
-func UploadPhoto() echo.MiddlewareFunc {
+func UploadPhotos() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			form, err := c.MultipartForm()
@@ -38,7 +33,8 @@ func UploadPhoto() echo.MiddlewareFunc {
 			)
 
 			for _, file := range files {
-				rename := generateDatetimeName(file.Filename)
+				ext := strings.ReplaceAll(path.Ext(file.Filename), ".", "")
+				rename := prandom.RandomNameFileFromExtension(ext)
 				f, err := file.Open()
 				if err != nil {
 					processError = err
@@ -68,7 +64,7 @@ func UploadPhoto() echo.MiddlewareFunc {
 					OriginName: file.Filename,
 					Name:       rename,
 					Size:       file.Size,
-					Ext:        strings.ReplaceAll(path.Ext(file.Filename), ".", ""),
+					Ext:        ext,
 					Path:       filePath,
 					Type:       constant.TypeFile.Photo,
 				}
@@ -114,7 +110,7 @@ func UploadZipPhoto() echo.MiddlewareFunc {
 				dir, _ = os.Getwd()
 			)
 
-			zipPath := path.Join(dir, constant.UploadFolderPath, generateDatetimeName(file.Filename))
+			zipPath := path.Join(dir, constant.UploadFolderPath, prandom.RandomNameFileFromExtension(constant.ZipExtension))
 
 			dst, err := os.Create(zipPath)
 			if err != nil {
@@ -150,7 +146,8 @@ func UploadZipPhoto() echo.MiddlewareFunc {
 
 				defer f.Close()
 
-				rename := generateDatetimeName(unzipFile.FileInfo().Name())
+				ext := strings.ReplaceAll(path.Ext(unzipFile.FileInfo().Name()), ".", "")
+				rename := prandom.RandomNameFileFromExtension(ext)
 				filePath := path.Join(dir, constant.UploadFolderPath, rename)
 
 				dst2, err := os.Create(filePath)
@@ -170,7 +167,7 @@ func UploadZipPhoto() echo.MiddlewareFunc {
 					OriginName: unzipFile.FileInfo().Name(),
 					Name:       rename,
 					Size:       unzipFile.FileInfo().Size(),
-					Ext:        strings.ReplaceAll(path.Ext(unzipFile.FileInfo().Name()), ".", ""),
+					Ext:        ext,
 					Path:       filePath,
 					Type:       constant.TypeFile.Photo,
 				}

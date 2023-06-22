@@ -16,3 +16,10 @@ type SizePhoto struct {
 	Height int    `json:"height"`
 	Url    string `json:"url"`
 }
+
+type FileResponse struct {
+	ID         string `json:"_id"`
+	Name       string `json:"name"`
+	NameOrigin string `json:"nameOrigin"`
+	Url        string `json:"url"`
+}

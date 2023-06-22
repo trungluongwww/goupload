@@ -17,3 +17,11 @@ func SetFiles(c echo.Context, value interface{}) {
 func GetFiles(c echo.Context) interface{} {
 	return c.Get(keyFiles)
 }
+
+func SetSingleFile(c echo.Context, value interface{}) {
+	c.Set(keySingleFile, value)
+}
+
+func GetSingleFile(c echo.Context) interface{} {
+	return c.Get(keySingleFile)
+}

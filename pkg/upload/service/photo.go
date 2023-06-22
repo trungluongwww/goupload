@@ -110,6 +110,7 @@ func (s photoImpl) convertToRawAndInsertDoc(ctx context.Context, origin requestm
 
 func (s photoImpl) convertToResponse(raw model.FileRaw) *responsemodel.PhotoResponse {
 	var (
+		// TODO: fix
 		url = os.Getenv("HOST")
 	)
 
@@ -176,13 +177,13 @@ func (s photoImpl) resizePhotos(f requestmodel.FileInfoPayload, option string) (
 	go func() {
 		defer wg.Done()
 		md = s.getDimension(f, constant.PrefixDimension.Medium, resizeDimension)
-		err = resizeimage.ProcessResizeImage(f.Path, md, image)
+		err = resizeimage.ProcessResizeImage(md, image)
 	}()
 
 	go func() {
 		defer wg.Done()
 		sm = s.getDimension(f, constant.PrefixDimension.Small, resizeDimension)
-		err = resizeimage.ProcessResizeImage(f.Path, sm, image)
+		err = resizeimage.ProcessResizeImage(sm, image)
 	}()
 
 	wg.Wait()
