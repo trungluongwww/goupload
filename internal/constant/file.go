@@ -28,7 +28,8 @@ var (
 // extension
 var (
 	ListExtensionPhotoValid    = []string{"JPEG", "JPG", "PNG", "jpg", "png", "jpeg"}
-	ZipExtension               = ".zip"
+	ZipExtension               = "zip"
+	PDFExtension               = "pdf"
 	ListCompressPhotoExtension = []string{"jpg", "jpeg", "JPEG", "JPG"}
 )
 

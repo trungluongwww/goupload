@@ -2,9 +2,11 @@ package service
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/trungluongwww/goupload/internal/constant"
 	"github.com/trungluongwww/goupload/internal/model"
+	"github.com/trungluongwww/goupload/internal/response"
 	"github.com/trungluongwww/goupload/internal/utils/prandom"
 	requestmodel "github.com/trungluongwww/goupload/pkg/upload/model/request"
 	responsemodel "github.com/trungluongwww/goupload/pkg/upload/model/response"
@@ -32,6 +34,11 @@ func (s fileImpl) UploadCompressionPDF(ctx context.Context, file requestmodel.Fi
 	)
 
 	defer os.Remove(file.Path)
+
+	// validate
+	if file.Ext != constant.PDFExtension {
+		return nil, errors.New(response.CommonInvalidExtension)
+	}
 
 	reName := prandom.RandomNameFileFromExtension(file.Ext)
 

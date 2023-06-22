@@ -95,7 +95,7 @@ func UploadZipPhoto() echo.MiddlewareFunc {
 				return response.R400(c, nil, response.CommonFileNotFound)
 			}
 
-			if ext := path.Ext(file.Filename); ext != constant.ZipExtension {
+			if ext := strings.ReplaceAll(path.Ext(file.Filename), ".", ""); ext != constant.ZipExtension {
 				return response.R400(c, nil, response.CommonInvalidExtension)
 			}
 
