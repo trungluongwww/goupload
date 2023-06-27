@@ -1,12 +1,27 @@
 package compresspdf
 
 import (
+	"errors"
 	"fmt"
+	"github.com/trungluongwww/goupload/internal/response"
 	"os/exec"
 )
 
-func Run(input, output string) (err error) {
-	cmd := exec.Command("gs", buildCompressionArguments(input, output)...)
+type PDF struct {
+	Input  string
+	Output string
+}
+
+func (c PDF) Compress() (err error) {
+	if c.Input == "" {
+		return errors.New(response.CommonFileNotFound)
+	}
+
+	if c.Output == "" {
+		c.Output = c.Input
+	}
+
+	cmd := exec.Command("gs", c.buildCompressionArguments(c.Input, c.Output)...)
 
 	if _, err = cmd.Output(); err != nil {
 		fmt.Println(err.Error())
@@ -15,7 +30,7 @@ func Run(input, output string) (err error) {
 	return err
 }
 
-func buildCompressionArguments(input, output string) []string {
+func (c PDF) buildCompressionArguments(input, output string) []string {
 	if output == "" {
 		output = input
 	}

@@ -46,10 +46,17 @@ func (s fileImpl) UploadCompressionPDF(ctx context.Context, file requestmodel.Fi
 	defer os.Remove(rePath)
 
 	// compress
-	if err := compresspdf.Run(file.Path, rePath); err == nil {
-		file.Path = rePath
-		file.Name = reName
+	c := compresspdf.PDF{
+		Input:  file.Path,
+		Output: rePath,
 	}
+
+	if err := c.Compress(); err != nil {
+		return nil, err
+	}
+
+	file.Path = rePath
+	file.Name = reName
 
 	// TODO: store s3
 	dst, err := os.Create(path.Join(dir, "static", reName))
